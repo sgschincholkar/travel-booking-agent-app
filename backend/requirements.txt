@@ -1,0 +1,10 @@
+fastapi==0.104.1
+uvicorn==0.24.0
+langchain-core==0.1.33
+langchain-anthropic==0.1.10
+langgraph==0.0.35
+resend==0.3.0
+serpapi==0.1.0
+python-dotenv==1.0.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
