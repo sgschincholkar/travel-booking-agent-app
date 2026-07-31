@@ -2,6 +2,7 @@ fastapi==0.104.1
 uvicorn==0.24.0
 langchain-core>=0.1.43,<0.2.0
 langchain-anthropic==0.1.10
+anthropic<0.30.0,>=0.23.0
 langgraph==0.0.35
 resend==0.3.0
 serpapi==0.1.0
