@@ -1,7 +1,7 @@
-'"'"'use client'"'"'
+'use client'
 
-import { useState } from '"'"'react'"'"'
-import axios from '"'"'axios'"'"'
+import { useState } from 'react'
+import axios from 'axios'
 
 interface QueryResponse {
   thread_id: string
@@ -13,27 +13,27 @@ interface EmailResponse {
 }
 
 export default function Home() {
-  const [query, setQuery] = useState('"'"''"'"')
-  const [threadId, setThreadId] = useState('"'"''"'"')
-  const [response, setResponse] = useState('"'"''"'"')
+  const [query, setQuery] = useState('')
+  const [threadId, setThreadId] = useState('')
+  const [response, setResponse] = useState('')
   const [loading, setLoading] = useState(false)
   const [emailLoading, setEmailLoading] = useState(false)
-  const [error, setError] = useState('"'"''"'"')
+  const [error, setError] = useState('')
 
-  const [senderEmail, setSenderEmail] = useState('"'"''"'"')
-  const [receiverEmail, setReceiverEmail] = useState('"'"''"'"')
-  const [subject, setSubject] = useState('"'"'Your Travel Plan'"'"')
-  const [emailStatus, setEmailStatus] = useState('"'"''"'"')
+  const [senderEmail, setSenderEmail] = useState('')
+  const [receiverEmail, setReceiverEmail] = useState('')
+  const [subject, setSubject] = useState('Your Travel Plan')
+  const [emailStatus, setEmailStatus] = useState('')
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || '"'"'http://localhost:8000'"'"'
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
   const handleQuery = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!query.trim()) return
 
     setLoading(true)
-    setError('"'"''"'"')
-    setResponse('"'"''"'"')
+    setError('')
+    setResponse('')
 
     try {
       const res = await axios.post<QueryResponse>(`${apiUrl}/api/query`, {
@@ -42,7 +42,7 @@ export default function Home() {
       setThreadId(res.data.thread_id)
       setResponse(res.data.response)
     } catch (err) {
-      setError(`Error: ${err instanceof Error ? err.message : '"'"'Failed to get response'"'"'}`)
+      setError(`Error: ${err instanceof Error ? err.message : 'Failed to get response'}`)
     } finally {
       setLoading(false)
     }
@@ -51,12 +51,12 @@ export default function Home() {
   const handleSendEmail = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!threadId || !senderEmail || !receiverEmail) {
-      setError('"'"'Please fill all email fields and get travel info first'"'"')
+      setError('Please fill all email fields and get travel info first')
       return
     }
 
     setEmailLoading(true)
-    setEmailStatus('"'"''"'"')
+    setEmailStatus('')
 
     try {
       const res = await axios.post<EmailResponse>(`${apiUrl}/api/send-email`, {
@@ -67,7 +67,7 @@ export default function Home() {
       })
       setEmailStatus(res.data.status)
     } catch (err) {
-      setError(`Email error: ${err instanceof Error ? err.message : '"'"'Failed to send email'"'"'}`)
+      setError(`Email error: ${err instanceof Error ? err.message : 'Failed to send email'}`)
     } finally {
       setEmailLoading(false)
     }
@@ -96,7 +96,7 @@ export default function Home() {
                 />
               </div>
               <button type="submit" disabled={loading || !query.trim()}>
-                {loading ? '"'"'Searching...'"'"' : '"'"'Get Travel Info'"'"'}
+                {loading ? 'Searching...' : 'Get Travel Info'}
               </button>
             </form>
 
@@ -138,7 +138,7 @@ export default function Home() {
                     />
                   </div>
                   <button type="submit" disabled={emailLoading}>
-                    {emailLoading ? '"'"'Sending...'"'"' : '"'"'Send Email'"'"'}
+                    {emailLoading ? 'Sending...' : 'Send Email'}
                   </button>
                 </form>
                 {emailStatus && <p className="success">{emailStatus}</p>}
@@ -153,7 +153,7 @@ export default function Home() {
               {error && <p className="error">{error}</p>}
               {response && <p>{response}</p>}
               {!loading && !response && !error && (
-                <p style={{ color: '"'"'#999'"'"' }}>Your travel information will appear here...</p>
+                <p style={{ color: '#999' }}>Your travel information will appear here...</p>
               )}
             </div>
           </div>
