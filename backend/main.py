@@ -15,6 +15,21 @@ from backend.email_sender import send_html_email
 agent = Agent()
 
 
+def extract_text(message) -> str:
+    content = getattr(message, "content", message)
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts = []
+        for block in content:
+            if isinstance(block, str):
+                parts.append(block)
+            elif isinstance(block, dict) and block.get("type") == "text":
+                parts.append(block.get("text") or "")
+        return "".join(parts)
+    return str(content)
+
+
 class QueryRequest(BaseModel):
     query: str
 
@@ -71,7 +86,7 @@ def query(request: QueryRequest):
         state = agent.graph.invoke({"messages": messages}, config=config)
 
         last_message = state["messages"][-1]
-        response_text = last_message.content if hasattr(last_message, 'content') else str(last_message)
+        response_text = extract_text(last_message)
 
         return QueryResponse(thread_id=thread_id, response=response_text)
     except Exception as e:
@@ -89,7 +104,7 @@ def send_email(request: EmailRequest):
         state = agent.graph.invoke({}, config=config)
 
         last_message = state["messages"][-1]
-        travel_html = last_message.content if hasattr(last_message, 'content') else str(last_message)
+        travel_html = extract_text(last_message)
 
         result = send_html_email(
             travel_html=travel_html,
