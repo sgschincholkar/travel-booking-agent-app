@@ -8,12 +8,13 @@ from langgraph.graph import END, StateGraph
 from backend.state import AgentState
 from backend.tools import TOOLS
 
-CURRENT_YEAR = datetime.datetime.now().year
-
-TOOLS_SYSTEM_PROMPT = f"""You are a smart travel agency. Use the tools to look up information.
+def build_tools_system_prompt() -> str:
+    today = datetime.date.today().isoformat()
+    return f"""You are a smart travel agency. Use the tools to look up information.
 You are allowed to make multiple calls (either together or in sequence).
 Only look up information when you are sure of what you want.
-The current year is {CURRENT_YEAR}. If you don't get flights, try searching till you find them!
+Today's date is {today}. All outbound/check-in dates you search for must be on or after
+this date. If you don't get flights, try searching till you find them!
 If you need to look up some information before asking a follow up question, you are allowed to do that!
 In your output, include links to hotel websites and flight websites (if possible),
 the logo of the hotel and the logo of the airline company (if possible),
@@ -55,7 +56,7 @@ class Agent:
 
     def call_tools_llm(self, state: AgentState):
         messages = state["messages"]
-        messages = [SystemMessage(content=TOOLS_SYSTEM_PROMPT)] + [
+        messages = [SystemMessage(content=build_tools_system_prompt())] + [
             self._strip_thinking(m) for m in messages
         ]
         message = self._tools_llm.invoke(messages)
