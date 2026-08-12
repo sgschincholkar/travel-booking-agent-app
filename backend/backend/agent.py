@@ -27,9 +27,7 @@ For example, for hotels:
 class Agent:
     def __init__(self):
         self._tools = {t.name: t for t in TOOLS}
-        self._tools_llm = ChatAnthropic(
-            model="claude-sonnet-5", thinking={"type": "disabled"}
-        ).bind_tools(TOOLS)
+        self._tools_llm = ChatAnthropic(model="claude-sonnet-5").bind_tools(TOOLS)
 
         builder = StateGraph(AgentState)
         builder.add_node("call_tools_llm", self.call_tools_llm)
@@ -57,9 +55,24 @@ class Agent:
 
     def call_tools_llm(self, state: AgentState):
         messages = state["messages"]
-        messages = [SystemMessage(content=TOOLS_SYSTEM_PROMPT)] + messages
+        messages = [SystemMessage(content=TOOLS_SYSTEM_PROMPT)] + [
+            self._strip_thinking(m) for m in messages
+        ]
         message = self._tools_llm.invoke(messages)
         return {"messages": [message]}
+
+    @staticmethod
+    def _strip_thinking(message: AnyMessage) -> AnyMessage:
+        if not isinstance(message.content, list):
+            return message
+        filtered = [
+            block
+            for block in message.content
+            if not (isinstance(block, dict) and block.get("type") == "thinking")
+        ]
+        if filtered == message.content:
+            return message
+        return message.copy(update={"content": filtered})
 
     def invoke_tools(self, state: AgentState):
         tool_calls = state["messages"][-1].tool_calls
