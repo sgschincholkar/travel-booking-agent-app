@@ -37,7 +37,7 @@ npm start
 1. Push to GitHub
 2. Connect repo to Vercel
 3. Set environment variable:
-   - `NEXT_PUBLIC_API_URL` = your HF Spaces backend URL
+   - `NEXT_PUBLIC_API_URL` = your Railway backend URL
 4. Deploy
 
 ## Features

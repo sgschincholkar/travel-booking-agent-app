@@ -75,12 +75,12 @@ Send travel results via email.
 }
 ```
 
-## Deployment (HF Spaces)
+## Deployment (Railway)
 
-1. Create Space at huggingface.co/spaces
-2. Add secrets:
+1. Create project at railway.app, deploy from GitHub repo, set root directory to `backend/`
+2. Add env vars:
    - `ANTHROPIC_API_KEY`
    - `SERPAPI_API_KEY`
    - `RESEND_API_KEY`
    - `FROM_EMAIL`
-3. Connect GitHub repo and deploy
+3. Railway auto-deploys on push to `main`
