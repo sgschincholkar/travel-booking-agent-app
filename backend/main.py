@@ -1,4 +1,5 @@
 import os
+import traceback
 import uuid
 from contextlib import asynccontextmanager
 
@@ -74,6 +75,7 @@ def query(request: QueryRequest):
 
         return QueryResponse(thread_id=thread_id, response=response_text)
     except Exception as e:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 
