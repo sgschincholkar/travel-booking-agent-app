@@ -2,6 +2,8 @@
 
 AI travel agent: search flights/hotels via natural language, email results. Split into two deployable apps in one repo.
 
+**Live:** [travel-booking-agent-app.vercel.app](https://travel-booking-agent-app.vercel.app/) (backend on Railway)
+
 ## Structure
 
 - `backend/` — FastAPI + LangGraph agent (Claude Sonnet, SerpAPI, Resend). Deploy to Railway.
