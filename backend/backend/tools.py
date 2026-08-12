@@ -1,9 +1,12 @@
+import logging
 import os
 from typing import Optional
 
 import serpapi
 from langchain_core.tools import tool
 from pydantic.v1 import BaseModel, Field
+
+logger = logging.getLogger(__name__)
 
 
 class FlightsInput(BaseModel):
@@ -48,6 +51,7 @@ def flights_finder(params: FlightsInput):
         search = serpapi.search(query)
         return search.data["best_flights"]
     except Exception as e:
+        logger.exception("flights_finder failed: query=%s", query)
         return str(e)
 
 
@@ -93,6 +97,7 @@ def hotels_finder(params: HotelsInput):
         data = search.data
         return data["properties"][:5]
     except Exception as e:
+        logger.exception("hotels_finder failed: query=%s", query)
         return str(e)
 
 
