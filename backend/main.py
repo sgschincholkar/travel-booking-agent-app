@@ -115,6 +115,7 @@ def send_email(request: EmailRequest):
 
         return EmailResponse(status=result)
     except Exception as e:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 
