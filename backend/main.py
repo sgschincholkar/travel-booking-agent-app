@@ -101,7 +101,7 @@ def send_email(request: EmailRequest):
     """
     try:
         config = {"configurable": {"thread_id": request.thread_id}}
-        state = agent.graph.invoke({}, config=config)
+        state = agent.graph.invoke(None, config=config)
 
         last_message = state["messages"][-1]
         travel_html = extract_text(last_message)
